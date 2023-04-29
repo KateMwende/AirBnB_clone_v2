@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ Console Module """
+import re
 import cmd
 import sys
 from models.base_model import BaseModel
@@ -114,11 +115,6 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """
-        Creates a new instance of BaseModel,
-        saves it (to the JSON file) and prints the id
-        Should take in 'key value' parameters
-        """
         my_list = args.split()
         if not args:
             print("** class name missing **")
@@ -127,22 +123,21 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         class_name = my_list[0]
-        params = class_name[1:]
+        params = my_list[1:]
 
         new_instance = HBNBCommand.classes[class_name]()
         for param in params:
             try:
                 k, v = param.split("=")
                 v = v.replace("_", " ")
-                v = v.replace('"', '\\')
-                if v[0] == '"' and v[-1] == '"' and len(v) > 1:
+                v = v.replace('\\"', '"')
+                if re.match(r'^".*"$', v):
                     v = v[1:-1]
-                if "." in v:
-                    v = float(v)
                 else:
-                    v = int(v)
-                setattr(new_instance, k, v)
-            except ValueError:
+                    v = eval(v)
+                if hasattr(new_instance, k):
+                    setattr(new_instance, k, v)
+            except (ValueError, SyntaxError):
                 continue
         storage.save()
         print(new_instance.id)
