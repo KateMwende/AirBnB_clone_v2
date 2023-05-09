@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #script that sets up your web servers for the deployment of web_static
 if ! dpkg -s nginx >/dev/null 2&1; then
-sudo apt -y update
-sudo apt -y install nginx
-sudo mkdir -p /data/web_static/releases/test/
+  sudo apt -y update
+  sudo apt -y install nginx
+fi
 sudo mkdir -p /data/web_static/shared/
 echo "html>
   <head>
