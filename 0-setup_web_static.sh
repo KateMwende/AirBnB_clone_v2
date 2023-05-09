@@ -11,9 +11,9 @@ sudo ln -sf /data/web_static/releases/test/  /data/web_static/current
 sudo chown -R ubuntu /data/
 sudo chgrp -R ubuntu /data/
 
-sudo echo “
+sudo echo "
 location /hbnb_static {
     alias /data/web_static/current;
     index index.html index.htm;
-}” >> /etc/nginx/sites-available/default
+}" | sudo tee /etc/nginx/sites-available/default
 sudo service nginx restart
