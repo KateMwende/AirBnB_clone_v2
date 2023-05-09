@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #script that sets up your web servers for the deployment of web_static
-
+if ! dpkg -s nginx >/dev/null 2&1; then
 sudo apt -y update
 sudo apt -y install nginx
 sudo mkdir -p /data/web_static/releases/test/
@@ -12,6 +12,7 @@ echo "html>
     Holberton School
   </body>
 </html>" | sudo tee /data/web_static/releases/test/index.html
+sudo rm -rf /data/web_static/current
 sudo ln -sf /data/web_static/releases/test/  /data/web_static/current
 sudo chown -R ubuntu /data/
 sudo chgrp -R ubuntu /data/
@@ -39,7 +40,7 @@ sudo echo "server {
 
         location /hbnb_static/ {
             alias /data/web_static/current/;
-            index index.html index.htm;
+            index index.html;
 	}
 }" | sudo tee /etc/nginx/sites-available/default
 sudo service nginx restart
