@@ -5,7 +5,6 @@ sudo apt -y update
 sudo apt -y install nginx
 sudo mkdir -p /data/web_static/releases/test/
 sudo mkdir -p /data/web_static/shared/
-sudo mkdir -p /data/web_static/current
 echo "html>
   <head>
   </head>
@@ -38,8 +37,8 @@ sudo echo "server {
         }
         error_page 404 /custom_404.html;
 
-        location /hbnb_static {
-            alias /data/web_static/current;
+        location /hbnb_static/ {
+            alias /data/web_static/current/;
             index index.html index.htm;
 	}
 }" | sudo tee /etc/nginx/sites-available/default
