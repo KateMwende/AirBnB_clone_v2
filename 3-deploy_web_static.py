@@ -59,7 +59,7 @@ def deploy():
     """
     distributes an archive to your web servers
     """
-    file_used = do_pack()
-    if file_used is None:
+    file = do_pack()
+    if file is None:
         return False
-    return do_deploy(file_used)
+    return do_deploy(file)
