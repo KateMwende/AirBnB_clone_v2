@@ -13,8 +13,9 @@ def do_pack():
     """
     try:
         local("mkdir -p versions")
-        r = datetime.now().strftime("%Y%m%d%H%M%s")
-        local("tar -cvzf versions/web_static_{}.tgz web_static/".format(r))
-        return ("versions/web_static_{}.tgz".format(r))
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%s")
+        archive_path = ("versions/web_static_{}.tgz".format(timestamp)) 
+        local("tar -cvzf versions/web_static_{}.tgz web_static/".format(timestamp))
+        return (archive_path)
     except Exception as e:
         return None
