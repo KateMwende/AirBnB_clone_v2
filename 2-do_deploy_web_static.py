@@ -16,7 +16,7 @@ def do_deploy(archive_path):
     Args:
         archive_path(str): path to archive to distribute
     Returns:
-       Returns True if all operations have been done correctly, 
+       Returns True if all operations have been done correctly,
        otherwise returns False
     """
     if not os.path.exists(archive_path):
