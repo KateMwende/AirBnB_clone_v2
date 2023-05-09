@@ -10,7 +10,6 @@ echo "html>
     Holberton School
   </body>
 </html>" | sudo tee /data/web_static/releases/test/index.html
-sudo rm -rf /data/web_static/current
 sudo ln -sf /data/web_static/releases/test/  /data/web_static/current
 sudo chown -R ubuntu /data/
 sudo chgrp -R ubuntu /data/
