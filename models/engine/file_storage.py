@@ -20,7 +20,7 @@ class FileStorage:
                 seperate = shlex.split(seperate)
                 if (seperate[0] == cls.__name__):
                     lis[key] = self.__objects[key]
-             return lis
+                return lis
         else:
             return self.__objects
 
