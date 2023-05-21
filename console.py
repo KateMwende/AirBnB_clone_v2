@@ -1,16 +1,16 @@
 #!/usr/bin/python3
 """ Console Module """
-import re
 import cmd
 import sys
 from models.base_model import BaseModel
-from models import storage
+from models.__init__ import storage
 from models.user import User
 from models.place import Place
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from shlex import split
 
 
 class HBNBCommand(cmd.Cmd):
@@ -115,32 +115,39 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        my_list = args.split()
-        if not args:
+        """ Create an object of any class"""
+        try:
+            if not line:
+                raise SyntaxError
+            my_list = line.split(" ")
+
+            kwargs = {}
+
+            for i in range(1, len(my_list)):
+                key, value = tuple(my_list[i].split("="))
+                if value[0] == '"':
+                    value = value.strip('"').replace("_", " ")
+                else:
+                    try:
+                        value = eval(value)
+                    except (SyntaxError, NameError):
+                        continue
+                kwargs[key] = value
+
+            if kwargs == {}:
+                obj = eval(my_list[0])()
+            else:
+                obj = eval(my_list[0])(**kwargs)
+                storage.new(obj)
+            print(obj.id)
+            obj.save()
+
+        except SyntaxError:
             print("** class name missing **")
             return
-        elif my_list[0] not in HBNBCommand.classes:
+        except NameError:
             print("** class doesn't exist **")
             return
-        class_name = my_list[0]
-        params = my_list[1:]
-
-        new_instance = HBNBCommand.classes[class_name]()
-        for param in params:
-            try:
-                k, v = param.split("=")
-                v = v.replace("_", " ")
-                v = v.replace('\\"', '"')
-                if re.match(r'^".*"$', v):
-                    v = v[1:-1]
-                else:
-                    v = eval(v)
-                if hasattr(new_instance, k):
-                    setattr(new_instance, k, v)
-            except (ValueError, SyntaxError):
-                continue
-        storage.save()
-        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
@@ -203,7 +210,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del (storage.all()[key])
+            del(storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -310,6 +317,7 @@ class HBNBCommand(cmd.Cmd):
 
         # retrieve dictionary of current objects
         new_dict = storage.all()[key]
+
         # iterate through attr names and values
         for i, att_name in enumerate(args):
             # block only runs on even iterations
