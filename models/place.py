@@ -4,6 +4,8 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Table, Integer, Float, String, ForeignKey
 from sqlalchemy.orm import relationship
 from os import getenv
+from models.amenity import Amenity
+from models.review import Review
 
 
 class Place(BaseModel, Base):
@@ -31,7 +33,7 @@ class Place(BaseModel, Base):
                                      primary_key=True, nullable=False))
 
     __tablename__ = 'places'
-    city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
+    city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     name = Column(String(128), nullable=False)
     description = Column(String(1024), nullable=True)
@@ -50,6 +52,7 @@ class Place(BaseModel, Base):
         @property
         def reviews(self):
             """Get a list of linked reviews"""
+            from models import storage
             review_list = []
             for review in list(models.storage.all(Review).values()):
                 if review.place_id == self.id:
@@ -59,10 +62,11 @@ class Place(BaseModel, Base):
         @property
         def amenities(self):
             """Get linked amenities"""
+            from models import storage
             amenity_list = []
             for amenity in list(models.storage.all(Amenity).values()):
                 if amenity.id in self.amenity_ids:
-                    amenit_list.append(amenity)
+                    amenity_list.append(amenity)
             return amenity_list
 
         @amenities.setter

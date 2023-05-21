@@ -18,7 +18,7 @@ Import this 7-dump to have some data
 You must use the option strict_slashes=False in your route definition
 """
 from flask import Flask, render_template
-from models import storage
+import models
 
 app = Flask(__name__)
 
@@ -26,8 +26,9 @@ app = Flask(__name__)
 @app.route("/states_list", strict_slashes=False)
 def states_list():
     """/states_list: display a HTML page: (inside the tag BODY)"""
-    states = Storage.all("State")
-    return render_template("7-states_list.html", state=state)
+    states = storage.all("State")
+    sorted_states = sorted(states, key=lambda state: state.name)
+    return render_template("7-states_list.html", states=sorted_states)
 
 
 @app.teardown_appcontext
