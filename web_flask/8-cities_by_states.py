@@ -13,9 +13,9 @@ Call in this method storage.close()
 Routes:
 /cities_by_states: display a HTML page: (inside the tag BODY)
 H1 tag: “States”
-UL tag: with the list of all State objects present in DBStorage sorted by name 
+UL tag: with the list of all State objects present in DBStorage sorted by name
 (A->Z) tip
-LI tag: description of one State: <state.id>: <B><state.name></B> + UL tag: 
+LI tag: description of one State: <state.id>: <B><state.name></B> + UL tag:
 with the list of City objects linked to the State sorted by name (A->Z)
 LI tag: description of one City: <city.id>: <B><city.name></B>
 """
@@ -30,7 +30,7 @@ app = Flask(__name__)
 def cities_by_states():
     """/cities_by_states: display a HTML page: (inside the tag BODY)"""
     states = Storage.all("City")
-	sorted_states = sorted(states, key=lambda state: state.name) 
+    sorted_states = sorted(states, key=lambda state: state.name)
     return render_template("8-cities_by_states.html", states=sorted_states)
 
 
